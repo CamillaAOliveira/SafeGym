@@ -1,0 +1,55 @@
+#include <csignal>
+#include <cstdio>
+#include <cstdlib>
+#include <exception>
+#include <string>
+
+#include <tgbot/tgbot.h>
+
+using namespace std;
+using namespace TgBot;
+
+#define TOKEN "1752787298:AAHuFGnIH4gar_cMpTc-sJjwwwCe22mEO5A"
+
+int main(int argc, char *argv[])
+{
+	Bot bot(token);
+	
+	bot.getEvents().onCommand("start", [&bot](Message::Ptr message) {
+        bot.getApi().sendMessage(message->chat->id, "Boa noite! Seja bem vindo ao bot de treinos SafeGym, este bot serve para enviar seus treinos. Qual será o seu treino de hoje? 1) /superior, 2) /inferior ou 3) /cardio.");
+	});	
+	
+	bot.getEvents().onCommand("help",[&bot](TgBot::Message::Ptr message ){
+		bot.getApi().sendMessage(message->chat->id,"Digite a opção de treino: 1) /superior, 2) /inferior ou 3) /cardio.");
+    });
+	
+	bot.getEvents().onCommand("superior",[&bot](Message::Ptr message){
+		//system("./treino superior");
+		bot.getApi().sendMessage(message->chat->id, "Aqui está o seu treino. Tenha um ótimo treino! Teste 1");
+	});
+	
+	bot.getEvents().onCommand("inferior",[&bot](Message::Ptr message){
+		//system("./treino inferior");
+		bot.getApi().sendMessage(message->chat->id, "Aqui está o seu treino. Tenha um ótimo treino! Teste 2");
+	});
+	
+	bot.getEvents().onCommand("cardio",[&bot](Message::Ptr message){
+		//system("./treino cardio");
+		bot.getApi().sendMessage(message->chat->id, "Aqui está o seu treino. Tenha um ótimo treino! Teste 3");
+	});
+
+    try {
+        printf("Bot username: %s\n", bot.getApi().getMe()->username.c_str());
+        bot.getApi().deleteWebhook();
+
+        TgLongPoll longPoll(bot);
+        while (true) {
+            printf("Long poll started\n");
+            longPoll.start();
+        }
+    } catch (exception& e) {
+        printf("error: %s\n", e.what());
+    }
+
+    return 0;
+}
